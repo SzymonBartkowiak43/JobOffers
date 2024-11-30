@@ -4,5 +4,5 @@ package org.example.domain.loginandregister.dto;
 import lombok.Builder;
 
 @Builder
-public record RegisterMessageDto(Long userId, String message, boolean created) {
+public record RegisterMessageDto(String userId, String message, boolean created) {
 }
