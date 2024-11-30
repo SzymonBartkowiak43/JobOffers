@@ -8,7 +8,7 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
     Map<String, Offer> offerDatabase = new ConcurrentHashMap<>();
 
     @Override
-    public Offer save(Offer offer) {
+    public Optional<Offer> save(Offer offer) {
         UUID id = UUID.randomUUID();
         Offer savedOffer = new Offer(
                 id.toString(),
@@ -18,9 +18,16 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
                 offer.salary(),
                 offer.offerUrl()
         );
+        boolean offerWithThisUriExisit = offerDatabase.values()
+                .stream()
+                .anyMatch(o -> o.offerUrl().equals(offer.offerUrl()));
+
+        if(offerWithThisUriExisit) {
+            throw new OfferWithThisUriAlreadyExists("Duplicated uri!");
+        }
 
         offerDatabase.put(savedOffer.offerId(), savedOffer);
-        return savedOffer;
+        return Optional.of(savedOffer);
     }
 
     @Override

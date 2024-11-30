@@ -4,6 +4,6 @@ import org.example.domain.offer.dto.OfferDto;
 
 import java.util.List;
 
-public interface OfferFeatchable {
+public interface OfferFetchable {
     List<OfferDto> fetchOffers();
 }
