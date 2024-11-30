@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OfferFacadeTest {
 
     OfferRepository offerRepository = new OfferRepositoryTestImpl();
-    OfferFeatchable offerFetcher = new OfferFeatcherTestImpl();
+    OfferFetchable offerFetcher = new OfferFetcherTestImpl();
     OfferFacade offerFacade = new OfferFacadeConfigurationTest().createForTest(offerRepository, offerFetcher);
 
 
@@ -23,7 +23,7 @@ public class OfferFacadeTest {
     void should_save_6_offer_when_repository_has_0_in_the_database() {
         //given
         //when
-        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExsists();
+        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExists();
         //then
         assertThat(offerRepository.getAllOffer().size()).isEqualTo(6);
     }
@@ -37,7 +37,7 @@ public class OfferFacadeTest {
         offerRepository.save(offer1);
         assertThat(offerRepository.getAllOffer().size()).isEqualTo(2);
         //when
-        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExsists();
+        List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExists();
         //then
         assertThat(offerRepository.getAllOffer().size()).isEqualTo(6);
     }
@@ -71,10 +71,19 @@ public class OfferFacadeTest {
                 .title("Junior Java Developer")
                 .companyName("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
-                .offerUrl("https://notfulljobs.com")
+                .offerUrl("https://notfulljobs.com/1")
                 .build();
+
+        OfferDto offerDto2 = OfferDto.builder()
+                .position("Junior")
+                .title("Junior Java Developer")
+                .companyName("BlueSoft Sp. z.o.o")
+                .salary("7 000 - 9 000")
+                .offerUrl("https://notfulljobs.com/2")
+                .build();
+
         SavedMessageDto savedOfferDto =  offerFacade.saveOffer(offerDto);
-        SavedMessageDto savedOfferDto2 =  offerFacade.saveOffer(offerDto);
+        SavedMessageDto savedOfferDto2 =  offerFacade.saveOffer(offerDto2);
         //when
         List<OfferDto> allOffers = offerFacade.findAllOffers();
 
@@ -117,5 +126,24 @@ public class OfferFacadeTest {
         //then
         assertThrows(OfferNotFoundException.class, () -> offerFacade.findOfferById(new FindOfferDto("2")), "Offer not found" ) ;
     }
+
+    @Test
+    public void should_throw_exception_offer_with_this_uri_already_exists(){
+        //given
+        OfferDto offerDto = OfferDto.builder()
+                .position("Junior")
+                .title("Junior Java Developer")
+                .companyName("BlueSoft Sp. z.o.o")
+                .salary("7 000 - 9 000")
+                .offerUrl("https://notfulljobs.com")
+                .build();
+        SavedMessageDto savedOfferDto =  offerFacade.saveOffer(offerDto);
+        //when
+        //then
+        assertThrows(OfferWithThisUriAlreadyExists.class, () -> offerFacade.saveOffer(offerDto), "Duplicated uri!");
+    }
+
+
+
 
 }

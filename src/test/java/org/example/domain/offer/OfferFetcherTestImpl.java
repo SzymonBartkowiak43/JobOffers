@@ -4,7 +4,7 @@ import org.example.domain.offer.dto.OfferDto;
 
 import java.util.List;
 
-public class OfferFeatcherTestImpl implements OfferFeatchable {
+public class OfferFetcherTestImpl implements OfferFetchable {
     @Override
     public List<OfferDto> fetchOffers() {
         return List.of(

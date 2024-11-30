@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface OfferRepository {
 
-    Offer save(Offer offer);
+    Optional<Offer> save(Offer offer);
 
     List<Offer> getAllOffer();
 

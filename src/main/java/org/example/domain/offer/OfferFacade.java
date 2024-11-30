@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class OfferFacade {
 
     private static final String OFFER_NOT_FOUND = "Offer not found";
+    private static final String DUPLICATED_URI = "Duplicated uri!";
 
     private final OfferRepository offerRepository;
     private final OfferService offerService;
@@ -35,7 +36,8 @@ public class OfferFacade {
 
     public SavedMessageDto saveOffer(OfferDto offerDto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(offerDto);
-        Offer savedOffer = offerRepository.save(offer);
+        Offer savedOffer = offerRepository.save(offer)
+                .orElseThrow(() -> new OfferWithThisUriAlreadyExists(DUPLICATED_URI));
 
         return SavedMessageDto.builder()
                 .message("success")
@@ -44,7 +46,7 @@ public class OfferFacade {
                 .build();
     }
 
-    public List<OfferResponseDto> fetchAllOffersAndSaveAllNotExsists() {
+    public List<OfferResponseDto> fetchAllOffersAndSaveAllNotExists() {
         List<Offer> offers = offerService.fetchAllOffer();
 
         return offers.stream()

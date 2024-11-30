@@ -8,7 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OfferService {
 
-    private final OfferFeatchable offerFetcher;
+    private final OfferFetchable offerFetcher;
     private final OfferRepository offerRepository;
 
 
