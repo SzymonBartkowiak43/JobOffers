@@ -31,8 +31,8 @@ public class OfferFacadeTest {
     @Test
     void should_save_4_offer_when_repository_has_2_offer_with_the_same_urls() {
         //given
-        Offer offer = new Offer("1","aaa", "junior", "abba", "7000-9000", "1");
-        Offer offer1 = new Offer("2","aaa", "junior", "abba", "7000-9000", "2");
+        Offer offer = new Offer("1","aaa",  "abba", "7000-9000", "1");
+        Offer offer1 = new Offer("2","aaa",  "abba", "7000-9000", "2");
         offerRepository.save(offer);
         offerRepository.save(offer1);
         assertThat(offerRepository.getAllOffer().size()).isEqualTo(2);
@@ -48,9 +48,8 @@ public class OfferFacadeTest {
     void should_save_offer_add_return_message_success() {
         //given
         OfferDto offerDto = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com")
                 .build();
@@ -67,17 +66,15 @@ public class OfferFacadeTest {
     void should_return_all_offer_from_database() {
         //given
         OfferDto offerDto = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com/1")
                 .build();
 
         OfferDto offerDto2 = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com/2")
                 .build();
@@ -97,9 +94,8 @@ public class OfferFacadeTest {
     void should_return_offer_by_id() {
         //given
         OfferDto offerDto = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com")
                 .build();
@@ -115,9 +111,8 @@ public class OfferFacadeTest {
     public void should_throws_exception_offer_not_exists() {
         //given
         OfferDto offerDto = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com")
                 .build();
@@ -131,9 +126,8 @@ public class OfferFacadeTest {
     public void should_throw_exception_offer_with_this_uri_already_exists(){
         //given
         OfferDto offerDto = OfferDto.builder()
-                .position("Junior")
                 .title("Junior Java Developer")
-                .companyName("BlueSoft Sp. z.o.o")
+                .company("BlueSoft Sp. z.o.o")
                 .salary("7 000 - 9 000")
                 .offerUrl("https://notfulljobs.com")
                 .build();

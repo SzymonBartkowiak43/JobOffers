@@ -8,8 +8,7 @@ public class OfferMapper {
     static OfferDto mapOfferToOfferDto(Offer offer) {
         return OfferDto.builder()
                 .title(offer.title())
-                .position(offer.position())
-                .companyName(offer.companyName())
+                .company(offer.company())
                 .salary(offer.salary())
                 .offerUrl(offer.offerUrl())
                 .build();
@@ -18,8 +17,7 @@ public class OfferMapper {
     static Offer mapOfferDtoToOffer(OfferDto offerDto) {
         return Offer.builder()
                 .title(offerDto.title())
-                .position(offerDto.position())
-                .companyName(offerDto.companyName())
+                .company(offerDto.company())
                 .salary(offerDto.salary())
                 .offerUrl(offerDto.offerUrl())
                 .build();
@@ -29,8 +27,7 @@ public class OfferMapper {
         return OfferResponseDto.builder()
                 .offerId(offer.offerId())
                 .title(offer.title())
-                .position(offer.position())
-                .companyName(offer.companyName())
+                .companyName(offer.company())
                 .salary(offer.salary())
                 .offerUrl(offer.offerUrl())
                 .build();

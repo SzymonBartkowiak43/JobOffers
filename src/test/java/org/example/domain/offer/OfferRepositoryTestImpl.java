@@ -13,8 +13,7 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
         Offer savedOffer = new Offer(
                 id.toString(),
                 offer.title(),
-                offer.position(),
-                offer.companyName(),
+                offer.company(),
                 offer.salary(),
                 offer.offerUrl()
         );
@@ -49,8 +48,7 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
             Offer savedOffer = new Offer(
                     id.toString(),
                     offer.title(),
-                    offer.position(),
-                    offer.companyName(),
+                    offer.company(),
                     offer.salary(),
                     offer.offerUrl()
             );

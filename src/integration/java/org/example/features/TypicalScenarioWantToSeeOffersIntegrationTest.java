@@ -19,36 +19,36 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
     @Test
     public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() {
-//        1.	step 1: there are 4 offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        //step 1: there are 0 offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         //given
-            wireMockServer.stubFor(WireMock.get("/api/v1.0/offers")
+            wireMockServer.stubFor(WireMock.get("/offers")
                     .willReturn(WireMock.aResponse()
                             .withStatus(HttpStatus.OK.value())
                             .withHeader("Content-Type", "application/json")
-                            .withBody(get4OfferDto())));
+                            .withBody(bodyWith0OffersJson())));
             //when
             List<OfferDto> offerDtos = offerFetchable.fetchOffers();
             //then
-            assertThat(offerDtos.size()).isEqualTo(4);
+            assertThat(offerDtos.size()).isEqualTo(0);
 
-//        2.	step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
-//        3.	step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
-//        4.	step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
-//        5.	step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
-//        6.	step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
-//        7.	step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
-//        8.	step 8: there are 2 new offers in external HTTP server
-//        9.	step 9: scheduler ran 2nd time and made GET to external server and system added 2 new offers with ids: 1000 and 2000 to database
-//        10.	step 10: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 2 offers with ids: 1000 and 2000
-//        11.	step 11: user made GET /offers/9999 and system returned NOT_FOUND(404) with message “Offer with id 9999 not found”
-//        12.	step 12: user made GET /offers/1000 and system returned OK(200) with offer
-//        13.	step 13: there are 2 new offers in external HTTP server
-//        14.	step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
-//        15.	step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
+        //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+        //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
+        //step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
+        //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
+        //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
+        //step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
+        //step 8: there are 2 new offers in external HTTP server
+        //step 9: scheduler ran 2nd time and made GET to external server and system added 2 new offers with ids: 1000 and 2000 to database
+        //step 10: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 2 offers with ids: 1000 and 2000
+        //step 11: user made GET /offers/9999 and system returned NOT_FOUND(404) with message “Offer with id 9999 not found”
+        //step 12: user made GET /offers/1000 and system returned OK(200) with offer
+        //step 13: there are 2 new offers in external HTTP server
+        //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
+        //step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
 
     }
 
-    private String get4OfferDto() {
+    private String bodyWith4OffersJson() {
         return """
                 [
                     {
@@ -77,5 +77,9 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
                     }
                 ]
                 """.trim();
+    }
+
+    private String bodyWith0OffersJson() {
+        return "";
     }
 }
