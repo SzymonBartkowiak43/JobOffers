@@ -5,6 +5,7 @@ import org.example.domain.offer.dto.FindOfferDto;
 import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.OfferResponseDto;
 import org.example.domain.offer.dto.SavedMessageDto;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,14 @@ public class OfferFacade {
     private final OfferRepository offerRepository;
     private final OfferService offerService;
 
+
+    public List<OfferResponseDto> fetchAllOffersAndSaveAllNotExists() {
+        List<Offer> offers = offerService.fetchAllOffer();
+
+        return offers.stream()
+                .map(OfferMapper::mapOfferToOfferResponseDto)
+                .collect(Collectors.toList());
+    }
 
     public List<OfferDto> findAllOffers() {
         List<Offer> allOffer = offerRepository.getAllOffer();
@@ -46,11 +55,5 @@ public class OfferFacade {
                 .build();
     }
 
-    public List<OfferResponseDto> fetchAllOffersAndSaveAllNotExists() {
-        List<Offer> offers = offerService.fetchAllOffer();
 
-        return offers.stream()
-                .map(OfferMapper::mapOfferToOfferResponseDto)
-                .collect(Collectors.toList());
-    }
 }

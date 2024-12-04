@@ -1,5 +1,7 @@
 package org.example.domain.offer;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 

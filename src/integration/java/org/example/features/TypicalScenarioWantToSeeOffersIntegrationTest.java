@@ -4,18 +4,25 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.example.BaseIntegrationTest;
 import org.example.domain.offer.OfferFetchable;
 import org.example.domain.offer.dto.OfferDto;
+import org.example.domain.offer.dto.OfferResponseDto;
+import org.example.infrastructure.offer.scheduler.FetchAllOfferScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetchable offerFetchable;
+
+    @Autowired
+    FetchAllOfferScheduler fetchAllOfferScheduler;
 
     @Test
     public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() {
@@ -32,6 +39,20 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
             assertThat(offerDtos.size()).isEqualTo(0);
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+        //given
+        List<OfferResponseDto> offerResponseDtos = fetchAllOfferScheduler.FetchOfferDto();
+//        await()
+//                .atMost(Duration.ofSeconds(20))
+//                .pollInterval(Duration.ofSeconds(1))
+//                .until(() -> {
+//                    offerFetchable.fetchOffers();
+//                   return true;
+//                });
+        //when
+        //then
+
+
+
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         //step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
         //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
