@@ -25,7 +25,7 @@ public class OfferFacadeTest {
         //when
         List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExists();
         //then
-        assertThat(offerRepository.getAllOffer().size()).isEqualTo(6);
+        assertThat(offerRepository.findAll().size()).isEqualTo(6);
     }
 
     @Test
@@ -35,11 +35,11 @@ public class OfferFacadeTest {
         Offer offer1 = new Offer("2","aaa",  "abba", "7000-9000", "2");
         offerRepository.save(offer);
         offerRepository.save(offer1);
-        assertThat(offerRepository.getAllOffer().size()).isEqualTo(2);
+        assertThat(offerRepository.findAll().size()).isEqualTo(2);
         //when
         List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExists();
         //then
-        assertThat(offerRepository.getAllOffer().size()).isEqualTo(6);
+        assertThat(offerRepository.findAll().size()).isEqualTo(6);
     }
 
 
