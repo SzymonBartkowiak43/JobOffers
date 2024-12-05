@@ -11,29 +11,7 @@ import java.util.Optional;
 public class OfferFacadeConfiguration {
 
     @Bean
-    OfferFacade offerFacade(OfferFetchable offerFetchable) {
-
-        OfferRepository repository = new OfferRepository() {
-            @Override
-            public Optional<Offer> save(Offer offer) {
-                return Optional.empty();
-            }
-
-            @Override
-            public List<Offer> getAllOffer() {
-                return null;
-            }
-
-            @Override
-            public Optional<Offer> getOfferById(String s) {
-                return Optional.empty();
-            }
-
-            @Override
-            public List<Offer> saveAll(List<Offer> list) {
-                return null;
-            }
-        };
+    OfferFacade offerFacade(OfferFetchable offerFetchable, OfferRepository repository) {
         OfferService offerService = new OfferService(offerFetchable, repository);
         return new OfferFacade(repository,offerService);
     }

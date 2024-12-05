@@ -19,9 +19,6 @@ import static org.awaitility.Awaitility.await;
 public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    OfferFetchable offerFetchable;
-
-    @Autowired
     FetchAllOfferScheduler fetchAllOfferScheduler;
 
     @Test
@@ -34,13 +31,14 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
                             .withHeader("Content-Type", "application/json")
                             .withBody(bodyWith0OffersJson())));
             //when
-            List<OfferDto> offerDtos = offerFetchable.fetchOffers();
             //then
-            assertThat(offerDtos.size()).isEqualTo(0);
+
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //given
         List<OfferResponseDto> offerResponseDtos = fetchAllOfferScheduler.FetchOfferDto();
+
+        assertThat(offerResponseDtos).isEmpty();
 //        await()
 //                .atMost(Duration.ofSeconds(20))
 //                .pollInterval(Duration.ofSeconds(1))

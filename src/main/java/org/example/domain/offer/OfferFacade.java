@@ -8,6 +8,7 @@ import org.example.domain.offer.dto.SavedMessageDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class OfferFacade {
     }
 
     public List<OfferDto> findAllOffers() {
-        List<Offer> allOffer = offerRepository.getAllOffer();
+        List<Offer> allOffer = offerRepository.findAll();
 
         return allOffer.stream()
                 .map(OfferMapper::mapOfferToOfferDto)
@@ -37,7 +38,7 @@ public class OfferFacade {
     }
 
     public OfferDto findOfferById(FindOfferDto findOfferDto) {
-        Offer offer = offerRepository.getOfferById(findOfferDto.OfferId())
+        Offer offer = offerRepository.findById(findOfferDto.OfferId())
                 .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND));
 
         return OfferMapper.mapOfferToOfferDto(offer);
@@ -45,8 +46,14 @@ public class OfferFacade {
 
     public SavedMessageDto saveOffer(OfferDto offerDto) {
         Offer offer = OfferMapper.mapOfferDtoToOffer(offerDto);
-        Offer savedOffer = offerRepository.save(offer)
-                .orElseThrow(() -> new OfferWithThisUriAlreadyExists(DUPLICATED_URI));
+
+        Optional<Offer> offerByOfferUrl = offerRepository.findOfferByOfferUrl(offer.offerUrl());
+
+        if(offerByOfferUrl.isPresent()) {
+            throw new OfferWithThisUriAlreadyExists(DUPLICATED_URI);
+        }
+
+        Offer savedOffer = offerRepository.save(offer);
 
         return SavedMessageDto.builder()
                 .message("success")

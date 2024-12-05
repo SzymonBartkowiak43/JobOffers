@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
+@Service
 public class OfferService {
 
     private final OfferFetchable offerFetcher;
@@ -16,20 +17,20 @@ public class OfferService {
 
     List<Offer> fetchAllOffer() {
         List<OfferDto> offerFetcherDtos = offerFetcher.fetchOffers();
-//
-//        List<String> offerUrl = offerRepository.getAllOffer().stream()
-//                .map(Offer::offerUrl)
-//                .toList();
-//
-//        List<OfferDto> offerDtos = OfferFilter.filterOffers(offerFetcherDtos, offerUrl);
-//
-//        List<Offer> list = offerDtos.stream()
-//                .map(OfferMapper::mapOfferDtoToOffer)
-//                .toList();
-//
-//        List<Offer> offers = offerRepository.saveAll(list);
-//
-//        return offers;
-        return Collections.emptyList();
+
+
+        List<String> offerUrl = offerRepository.findAll().stream()
+                .map(Offer::offerUrl)
+                .toList();
+
+        List<OfferDto> offerDtos = OfferFilter.filterOffers(offerFetcherDtos, offerUrl);
+
+        List<Offer> list = offerDtos.stream()
+                .map(OfferMapper::mapOfferDtoToOffer)
+                .toList();
+
+        List<Offer> offers = offerRepository.saveAll(list);
+
+        return offers;
     }
 }
