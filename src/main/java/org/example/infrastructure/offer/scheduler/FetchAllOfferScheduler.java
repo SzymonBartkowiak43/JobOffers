@@ -24,7 +24,7 @@ public class FetchAllOfferScheduler {
     private final static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Scheduled(fixedDelayString = "${http.offers.scheduler.request.delay}")
-    public  List<OfferResponseDto> FetchOfferDto() {
+    public  List<OfferResponseDto> FetchOfferAndSaveIfNotExists() {
         log.info(START, dateFormat.format(new Date()));
         List<OfferResponseDto> addedOffers = offerFacade.fetchAllOffersAndSaveAllNotExists();
         log.info(ADD_NEW_OFFERS_MESSAGE, addedOffers.size());

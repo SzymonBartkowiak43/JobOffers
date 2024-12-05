@@ -2,15 +2,12 @@ package org.example.features;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.example.BaseIntegrationTest;
-import org.example.domain.offer.OfferFetchable;
-import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.OfferResponseDto;
 import org.example.infrastructure.offer.scheduler.FetchAllOfferScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.time.Duration;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +33,7 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //given
-        List<OfferResponseDto> offerResponseDtos = fetchAllOfferScheduler.FetchOfferDto();
+        List<OfferResponseDto> offerResponseDtos = fetchAllOfferScheduler.FetchOfferAndSaveIfNotExists();
 
         assertThat(offerResponseDtos).isEmpty();
 //        await()
