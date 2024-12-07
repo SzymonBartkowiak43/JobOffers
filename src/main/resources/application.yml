@@ -2,7 +2,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/jobOffer-web
-
 jobOffer:
   offer-fetchable:
     http:
@@ -19,3 +18,9 @@ http:
 
 scheduling:
   enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
