@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/jobOffer-web
+      auto-index-creation: true
 jobOffer:
   offer-fetchable:
     http:
