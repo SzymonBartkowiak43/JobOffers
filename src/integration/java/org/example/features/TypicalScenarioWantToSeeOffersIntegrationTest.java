@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.example.BaseIntegrationTest;
 import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.OfferResponseDto;
+import org.example.domain.offer.dto.SavedMessageDto;
 import org.example.infrastructure.offer.scheduler.FetchAllOfferScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -101,6 +103,47 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
         //step 13: there are 2 new offers in external HTTP server
         //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
         //step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
+        //step 16: user made /POST /Offers with body and system returned 201 created with saved offer
+        //given && when
+        ResultActions performPostOffers = mockMvc.perform(post("/offers")
+                .content("""
+                        {
+                            "title": "Junior Java Developer",
+                            "company": "BlueSoft Sp. z o.o.",
+                            "salary": "7 000 – 9 000 PLN",
+                            "offerUrl": "uniqueLink"
+                        }
+                        """.trim())
+                .contentType(MediaType.APPLICATION_JSON +";charset=UTF-8"));
+        //then
+        MvcResult resultFromPostOffer = performPostOffers.andExpect(status().isCreated()).andReturn();
+        String postedJson = resultFromPostOffer.getResponse().getContentAsString();
+        SavedMessageDto savedMessageDto = objectMapper.readValue(postedJson, SavedMessageDto.class);
+        String offerId = savedMessageDto.offerId();
+
+        assertAll(
+                () -> assertThat(offerId).isNotNull(),
+                () -> assertTrue(savedMessageDto.created())
+        );
+
+
+
+        //step 17: user made GET /offers and system returned OK(200) with 1 offer
+        // given && when
+        ResultActions performGetOfferExisit= mockMvc.perform(get("/offers/" + offerId));
+        //then
+        String findOfferJson = performGetOfferExisit.andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OfferDto parsedJsonToOffer =  objectMapper.readValue(findOfferJson, OfferDto.class);
+
+        assertAll(
+                () -> assertThat(parsedJsonToOffer.title()).isEqualTo("Junior Java Developer"),
+                () -> assertThat(parsedJsonToOffer.company()).isEqualTo("BlueSoft Sp. z o.o.")
+        );
+
 
     }
 
