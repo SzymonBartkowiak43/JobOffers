@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OfferFacade {
 
-    private static final String OFFER_NOT_FOUND = "Offer not found";
     private static final String DUPLICATED_URI = "Duplicated uri!";
 
     private final OfferRepository offerRepository;
@@ -39,7 +38,7 @@ public class OfferFacade {
 
     public OfferDto findOfferById(FindOfferDto findOfferDto) {
         Offer offer = offerRepository.findById(findOfferDto.OfferId())
-                .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND));
+                .orElseThrow(() -> new OfferNotFoundException("Offer with id " + findOfferDto.OfferId() + " not found"));
 
         return OfferMapper.mapOfferToOfferDto(offer);
     }

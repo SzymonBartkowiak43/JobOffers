@@ -64,13 +64,12 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
         //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
         //step 7: user made GET /offers  and system returned OK(200) with 0 offers
 
-        // given
-        // when
-        ResultActions perform = mockMvc.perform(get("/offers")
+        // given && when
+        ResultActions performGetAllOffers = mockMvc.perform(get("/offers")
                 .contentType(MediaType.APPLICATION_JSON_VALUE));
         // then
 
-        MvcResult mvcResult = perform.andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = performGetAllOffers.andExpect(status().isOk()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         List<OfferDto> offers = objectMapper.readValue(json, new TypeReference<>() {
         });
@@ -82,7 +81,22 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
         //step 8: there are 2 new offers in external HTTP server
         //step 9: scheduler ran 2nd time and made GET to external server and system added 2 new offers with ids: 1000 and 2000 to database
         //step 10: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 2 offers with ids: 1000 and 2000
+
+
         //step 11: user made GET /offers/9999 and system returned NOT_FOUND(404) with message “Offer with id 9999 not found”
+        // given && when
+        ResultActions performGetOffer= mockMvc.perform(get("/offers/9999"));
+        //then
+        performGetOffer.andExpect(status().isNotFound())
+                .andExpect(content().json("""
+                        {
+                            "message": "Offer with id 9999 not found",
+                            "status": "NOT_FOUND"
+                        }
+                        """.trim()
+                ));
+
+
         //step 12: user made GET /offers/1000 and system returned OK(200) with offer
         //step 13: there are 2 new offers in external HTTP server
         //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
