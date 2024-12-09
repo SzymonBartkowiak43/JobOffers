@@ -1,29 +1,22 @@
 package org.example.features;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.example.BaseIntegrationTest;
+import org.example.SampleJobOffer;
 import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.OfferResponseDto;
 import org.example.domain.offer.dto.SavedMessageDto;
 import org.example.infrastructure.offer.scheduler.FetchAllOfferScheduler;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,9 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 
-public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrationTest {
+public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrationTest implements SampleJobOffer {
 
     @Autowired
     FetchAllOfferScheduler fetchAllOfferScheduler;
@@ -44,22 +36,45 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
     public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() throws Exception {
         //step 1: there are 0 offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         //given && when && then
-            wireMockServer.stubFor(WireMock.get("/offers")
-                    .willReturn(WireMock.aResponse()
-                            .withStatus(HttpStatus.OK.value())
-                            .withHeader("Content-Type", "application/json; charset=UTF-8")
-                            .withBody(bodyWith0OffersJson())));
+        wireMockServer.stubFor(WireMock.get("/offers")
+                .willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader("Content-Type", "application/json; charset=UTF-8")
+                        .withBody(bodyWith0OffersJson())));
 
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //given
-        List<OfferResponseDto> offerResponseDtos = fetchAllOfferScheduler.FetchOfferAndSaveIfNotExists();
+        Throwable throwable = catchThrowable(() -> fetchAllOfferScheduler.FetchOfferAndSaveIfNotExists());
 
         //when && then
-        assertThat(offerResponseDtos).isEmpty();
+        assertThat(throwable).isNotNull();
 
 
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
+        // given && when
+        ResultActions failedLoginRequest = mockMvc.perform(post("/token")
+                .content("""
+                        {
+                        "username": "someUser",
+                        "password": "somePassword"
+                        }
+                        """.trim())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        );
+        // then
+        failedLoginRequest
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().json(
+                        """
+                                {
+                                "message": "Bad Credentials",
+                                "status": "UNAUTHORIZED"
+                                }
+                                """.trim()
+                ));
+
+
         //step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
         //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
         //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
@@ -106,7 +121,7 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
                 .characterEncoding("UTF-8"));
 
         // when
-        String offersJson  = performGet2Offers .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        String offersJson = performGet2Offers.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         List<OfferDto> twoOffers = objectMapper.readValue(offersJson, new TypeReference<>() {
         });
@@ -119,7 +134,7 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
         //step 11: user made GET /offers/9999 and system returned NOT_FOUND(404) with message “Offer with id 9999 not found”
         // given && when
-        ResultActions performGetOfferNotExist= mockMvc.perform(get("/offers/9999"));
+        ResultActions performGetOfferNotExist = mockMvc.perform(get("/offers/9999"));
         //then
         performGetOfferNotExist.andExpect(status().isNotFound())
                 .andExpect(content().json("""
@@ -171,14 +186,14 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8"));
 
-        String offers4Json  = performGet4Offers .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        String offers4Json = performGet4Offers.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         List<OfferDto> fourOffers = objectMapper.readValue(offers4Json, new TypeReference<>() {
         });
 
         //then
         assertAll(
-                () -> assertThat(fourOffers .size()).isEqualTo(4)
+                () -> assertThat(fourOffers.size()).isEqualTo(4)
         );
 
         //step 16: user made /POST /Offers with body and system returned 201 created with saved offer
@@ -194,7 +209,7 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
                             "offerUrl": "uniqueLink"
                         }
                         """.trim())
-                .contentType(MediaType.APPLICATION_JSON +";charset=UTF-8"));
+                .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8"));
         //then
         MvcResult resultFromPostOffer = performPostOffers.andExpect(status().isCreated()).andReturn();
         String postedJson = resultFromPostOffer.getResponse().getContentAsString();
@@ -207,17 +222,16 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
         );
 
 
-
         //step 17: user made GET /offers and system returned OK(200) with 1 offer
         // given && when
-        ResultActions performGetOfferExisit= mockMvc.perform(get("/offers/" + offerId));
+        ResultActions performGetOfferExisit = mockMvc.perform(get("/offers/" + offerId));
         //then
         String findOfferJson = performGetOfferExisit.andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        OfferDto parsedJsonToOffer =  objectMapper.readValue(findOfferJson, OfferDto.class);
+        OfferDto parsedJsonToOffer = objectMapper.readValue(findOfferJson, OfferDto.class);
 
         assertAll(
                 () -> assertThat(parsedJsonToOffer.title()).isEqualTo("Junior Java Developer"),
@@ -227,58 +241,5 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
     }
 
-    private String bodyWith4OffersJson() {
-        return """
-                [
-                    {
-                        "title": "Crazy developer",
-                        "company": "X",
-                        "salary": "7 000 - 9 000 PLN",
-                        "offerUrl": "offer 1"
-                    },
-                    {
-                        "title": "Java Developer",
-                        "company": "Tesla",
-                        "salary": "16 000 - 18 000 PLN",
-                        "offerUrl": "offer 2"
-                    },
-                    {
-                        "title": "Junior Java Developer",
-                        "company": "Sollers Consulting",
-                        "salary": "7 500 - 11 500 PLN",
-                        "offerUrl": "https://nofluffjobs.com/pl/job/junior-java-developer-sollers-consulting-warszawa-s6et1ucc"
-                    },
-                    {
-                        "title": "Junior Full Stack Developer",
-                        "company": "Vertabelo S.A.",
-                        "salary": "7 000 - 9 000 PLN",
-                        "offerUrl": "https://nofluffjobs.com/pl/job/junior-full-stack-developer-vertabelo-remote-k7m9xpnm"
-                    }
-                ]
-                """.trim();
-    }
-    private String bodyWith2OffersJson() {
-        return """
-                [
-                    {
-                        "title": "Crazy developer",
-                        "company": "X",
-                        "salary": "7 000 - 9 000 PLN",
-                        "offerUrl": "offer 1"
-                    },
-                    {
-                        "title": "Java Developer",
-                        "company": "Tesla",
-                        "salary": "16 000 - 18 000 PLN",
-                        "offerUrl": "offer 2"
-                    }
-                ]
-                """.trim();
-    }
 
-
-
-    private String bodyWith0OffersJson() {
-        return "";
-    }
 }

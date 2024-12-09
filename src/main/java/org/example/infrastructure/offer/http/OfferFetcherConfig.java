@@ -18,11 +18,13 @@ public class OfferFetcherConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateResponseErrorHandler restTemplateResponseErrorHandler) {
+    public RestTemplate restTemplate(@Value("${jobOffer.offer-fetchable.http.client.config.connectionTimeout:1000}") long connectionTimeout,
+                                     @Value("${jobOffer.offer-fetchable.http.client.config.readTimeout:1000}") long readTimeout,
+                                     RestTemplateResponseErrorHandler restTemplateResponseErrorHandler) {
         return new RestTemplateBuilder()
                 .errorHandler(restTemplateResponseErrorHandler)
-                .setConnectTimeout(Duration.ofMillis(5000))
-                .setReadTimeout(Duration.ofMillis(5000))
+                .setConnectTimeout(Duration.ofMillis(connectionTimeout))
+                .setReadTimeout(Duration.ofMillis(readTimeout))
                 .build();
     }
 

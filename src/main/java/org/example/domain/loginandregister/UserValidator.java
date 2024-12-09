@@ -1,10 +1,13 @@
 package org.example.domain.loginandregister;
 
+import org.springframework.stereotype.Component;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+@Component
 class UserValidator {
 
 
