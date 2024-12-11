@@ -7,6 +7,7 @@ import org.example.domain.offer.OfferFacade;
 import org.example.domain.offer.dto.FindOfferDto;
 import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.SavedMessageDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
