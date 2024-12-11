@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 public class UserRepositoryTestImpl implements UserRepository {
 
-    private final Map<String, User> userDatabase = new ConcurrentHashMap<>(); //userName - User
+    private final Map<String, User> userDatabase = new ConcurrentHashMap<>(); //username - User
 
     @Override
     public Optional<User> findByUserName(String userName) {

@@ -31,7 +31,7 @@ public class LoginAndRegisterFacade {
     }
 
     public RegisterMessageDto register(RegisterUserDto registerUserDto) {
-        String userName = registerUserDto.userName();
+        String userName = registerUserDto.username();
         String password = registerUserDto.password();
 
         List<ValidationResult> validationResults = userValidator.validate(userName, password);
