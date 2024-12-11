@@ -11,12 +11,13 @@ import java.util.stream.Collectors;
 class UserValidator {
 
 
-    private static final int MIN_LENGTH_OF_USER_NAME = 6;
-    private static final int MIN_LENGTH_OF_PASSWORD = 5;
+    private static final int MIN_LENGTH_OF_USER_NAME = 3;
+    private static final int MIN_LENGTH_OF_PASSWORD = 3;
 
-    private List<ValidationResult> errors = new LinkedList<>();
+    private List<ValidationResult> errors;
 
     List<ValidationResult> validate(String userName, String password) {
+        errors = new LinkedList<>();
         validateUserName(userName);
         validatePassword(password);
 
