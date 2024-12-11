@@ -1,19 +1,23 @@
 package org.example.domain.loginandregister;
 
+import org.springframework.stereotype.Component;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+@Component
 class UserValidator {
 
 
-    private static final int MIN_LENGTH_OF_USER_NAME = 6;
-    private static final int MIN_LENGTH_OF_PASSWORD = 5;
+    private static final int MIN_LENGTH_OF_USER_NAME = 3;
+    private static final int MIN_LENGTH_OF_PASSWORD = 3;
 
-    private List<ValidationResult> errors = new LinkedList<>();
+    private List<ValidationResult> errors;
 
     List<ValidationResult> validate(String userName, String password) {
+        errors = new LinkedList<>();
         validateUserName(userName);
         validatePassword(password);
 

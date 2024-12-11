@@ -4,6 +4,7 @@ import org.example.BaseIntegrationTest;
 import org.example.infrastructure.apivalidation.ApiValidationErrorDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 
@@ -15,6 +16,7 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
+    @WithMockUser
     public void should_reurn_400_bad_request_and_validation_message_empty_and_null() throws Exception {
         //given && when
         ResultActions performPostOffers = mockMvc.perform(post("/offers")

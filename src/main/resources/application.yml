@@ -9,6 +9,8 @@ jobOffer:
       client:
         config:
           uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
+          connectionTimeout: 1000
+          readTimeout: 1000
           port: 5057
 http:
   offers:
@@ -16,6 +18,11 @@ http:
       request:
         delay: PT3H
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 scheduling:
   enabled: true
@@ -25,3 +32,9 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui
+
+auth:
+  jwt:
+    expirationDays: 30
+    secret: ${JWT_SECRET}
+    issuer: job-offers-backend
