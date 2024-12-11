@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
+import java.io.Serializable;
+
 @Builder
 public record OfferDto(
         @NotNull(message = "{title.not.null}")
@@ -17,5 +19,5 @@ public record OfferDto(
         String salary,
         @NotNull(message = "{offerUrl.not.null}")
         @NotEmpty(message = "{offerUrl.not.empty}")
-        String offerUrl) {
+        String offerUrl) implements Serializable {
 }

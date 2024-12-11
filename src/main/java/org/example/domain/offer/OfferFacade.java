@@ -5,6 +5,7 @@ import org.example.domain.offer.dto.FindOfferDto;
 import org.example.domain.offer.dto.OfferDto;
 import org.example.domain.offer.dto.OfferResponseDto;
 import org.example.domain.offer.dto.SavedMessageDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class OfferFacade {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable("jobOffers")
     public List<OfferDto> findAllOffers() {
         List<Offer> allOffer = offerRepository.findAll();
 
