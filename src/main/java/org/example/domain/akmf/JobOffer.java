@@ -13,13 +13,6 @@ public class JobOffer {
     public JobOffer() {
     }
 
-    public JobOffer(String title, String offerUrl, String workMode, String salary) {
-        this.title = title;
-        this.offerUrl = offerUrl;
-        this.workMode = workMode;
-        this.salary = salary;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -34,14 +27,6 @@ public class JobOffer {
 
     public void setOfferUrl(String offerUrl) {
         this.offerUrl = offerUrl;
-    }
-
-    public String getWorkMode() {
-        return workMode;
-    }
-
-    public void setWorkMode(String workMode) {
-        this.workMode = workMode;
     }
 
     public String getSalary() {
