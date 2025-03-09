@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers("/token/**").permitAll()
                                 .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/swagger-resources/**").permitAll()
+                                .requestMatchers("/download/**").permitAll()
                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
