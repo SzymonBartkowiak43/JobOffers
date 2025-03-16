@@ -1,23 +1,29 @@
 package org.example.domain.offer.dto;
 
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import org.example.domain.offer.SourceSystem;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record OfferDto(
-        @NotNull(message = "{title.not.null}")
-        @NotEmpty(message = "{title.not.empty}")
         String title,
-        @NotNull(message = "{company.not.null}")
-        @NotEmpty(message = "{company.not.empty}")
-        String company,
-        @NotNull(message = "{salary.not.null}")
-        @NotEmpty(message = "{salary.not.empty}")
-        String salary,
         @NotNull(message = "{offerUrl.not.null}")
         @NotEmpty(message = "{offerUrl.not.empty}")
-        String offerUrl) implements Serializable {
+        String offerUrl,
+        String location,
+        String workMode,
+        String salary,
+        String company,
+        List<String> skills,
+        SourceSystem source,
+        LocalDateTime fetchDate
+)
+         implements Serializable {
 }

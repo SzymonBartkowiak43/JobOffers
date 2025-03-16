@@ -37,7 +37,6 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
         ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
         assertThat(result.messages()).containsExactlyInAnyOrder(
-                "company must not be empty",
                 "offerUrl must not be empty",
                 "offerUrl must not be null"
         );

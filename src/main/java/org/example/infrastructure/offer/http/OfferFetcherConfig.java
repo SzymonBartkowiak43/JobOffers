@@ -18,8 +18,8 @@ public class OfferFetcherConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(@Value("${jobOffer.offer-fetchable.http.client.config.connectionTimeout:1000}") long connectionTimeout,
-                                     @Value("${jobOffer.offer-fetchable.http.client.config.readTimeout:1000}") long readTimeout,
+    public RestTemplate restTemplate(@Value("${jobOffer.offer-fetchable.http.client.config.connectionTimeout:10000}") long connectionTimeout,
+                                     @Value("${jobOffer.offer-fetchable.http.client.config.readTimeout:30000}") long readTimeout,
                                      RestTemplateResponseErrorHandler restTemplateResponseErrorHandler) {
         return new RestTemplateBuilder()
                 .errorHandler(restTemplateResponseErrorHandler)

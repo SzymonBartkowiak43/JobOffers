@@ -6,6 +6,7 @@ import org.example.domain.offer.dto.OfferResponseDto;
 import org.example.domain.offer.dto.SavedMessageDto;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,17 +30,17 @@ public class OfferFacadeTest {
     }
 
     @Test
-    void should_save_4_offer_when_repository_has_2_offer_with_the_same_urls() {
+    void should_save_2_offer_when_repository_has_2_offer_with_the_different_urls() {
         //given
-        Offer offer = new Offer("1","aaa",  "abba", "7000-9000", "1");
-        Offer offer1 = new Offer("2","aaa",  "abba", "7000-9000", "2");
+        Offer offer = new Offer("1","aaa",  "abbaqwer1", "Warszawa", "Hybrydowy", "2 000 - 3 000", "BlueSoft", List.of("Java"), SourceSystem.valueOf("AKMF"), LocalDateTime.of(2021, 10, 10, 10, 10));
+        Offer offer1 = new Offer("2","aaa",  "abbaqwer2", "Warszawa", "Hybrydowy", "2 000 - 3 000", "BlueSoft", List.of("Java"), SourceSystem.valueOf("AKMF"), LocalDateTime.of(2021, 10, 10, 10, 10));
         offerRepository.save(offer);
         offerRepository.save(offer1);
         assertThat(offerRepository.findAll().size()).isEqualTo(2);
         //when
         List<OfferResponseDto> offerResponseDtos = offerFacade.fetchAllOffersAndSaveAllNotExists();
         //then
-        assertThat(offerRepository.findAll().size()).isEqualTo(6);
+        assertThat(offerRepository.findAll().size()).isEqualTo(8);
     }
 
 

@@ -15,15 +15,15 @@ jobOffer:
     http:
       client:
         config:
-          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
-          connectionTimeout: 1000
-          readTimeout: 1000
-          port: 5057
+          uri: http://localhost
+          connectionTimeout: 10000
+          readTimeout: 30000
+          port: 8099
 http:
   offers:
     scheduler:
       request:
-        delay: PT3H
+        delay: PT3M
 
 logging:
   level:

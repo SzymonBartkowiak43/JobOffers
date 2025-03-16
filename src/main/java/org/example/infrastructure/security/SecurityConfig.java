@@ -42,7 +42,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return
                 httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                        //.csrf(csrf -> csrf.ignoringRequestMatchers("/swagger-ui/**", "/v3/api-docs/**"))
                         .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/swagger-ui").permitAll()
@@ -53,8 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/swagger-resources/**").permitAll()
                                 .requestMatchers("/download/**").permitAll()
-                                        .anyRequest().permitAll()
-//                                .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                         )
                         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .httpBasic(Customizer.withDefaults())

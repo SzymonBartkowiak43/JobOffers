@@ -26,7 +26,7 @@ public class OfferFetcherRestTemplate implements OfferFetchable {
     @Override
     public List<OfferDto> fetchOffers() {
         log.info("Start fetching offers using http service");
-        String urlForService = getUrlForService("/offers");
+        String urlForService = getUrlForService("/offers/all");
         HttpHeaders headers = new HttpHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
 

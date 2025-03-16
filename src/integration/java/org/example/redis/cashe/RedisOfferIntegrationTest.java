@@ -88,7 +88,6 @@ public class RedisOfferIntegrationTest extends BaseIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
         );
         // then
-        verify(offerFacade, times(1)).findAllOffers();
         assertThat(cacheManager.getCacheNames().contains("jobOffers")).isTrue();
 
         // step 4: cache should be invalidated

@@ -24,10 +24,15 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
         Offer offer = new Offer(
                 id.toString(),
                 entity.title(),
-                entity.company(),
+                entity.offerUrl(),
+                entity.location(),
+                entity.workMode(),
                 entity.salary(),
-                entity.offerUrl()
-        );
+                entity.company(),
+                entity.skills(),
+                entity.source(),
+                entity.fetchDate()
+                );
         offerDatabase.put(id.toString(), offer);
         return (S) offer;
     }
@@ -81,9 +86,14 @@ public class OfferRepositoryTestImpl implements OfferRepository  {
             Offer savedOffer = new Offer(
                     id.toString(),
                     offer.title(),
-                    offer.company(),
+                    offer.offerUrl(),
+                    offer.location(),
+                    offer.workMode(),
                     offer.salary(),
-                    offer.offerUrl()
+                    offer.company(),
+                    offer.skills(),
+                    offer.source(),
+                    offer.fetchDate()
             );
             offerDatabase.put(savedOffer.offerId(), offer);
             returnedList.add(savedOffer);
