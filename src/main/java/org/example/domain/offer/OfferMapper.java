@@ -35,6 +35,7 @@ public class OfferMapper {
 
     static OfferResponseDto mapOfferToOfferResponseDto(Offer offer) {
         return OfferResponseDto.builder()
+                .offerId(offer.offerId())
                 .title(offer.title())
                 .offerUrl(offer.offerUrl())
                 .location(offer.location())

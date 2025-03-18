@@ -12,9 +12,11 @@ import java.util.List;
 @Builder
 @Document
 public record Offer(
-        @Id String offerId,
+        @Id
+        String offerId,
         String title,
-        @Indexed(unique = true) String offerUrl,
+        @Indexed(unique = true)
+        String offerUrl,
         String location,
         String workMode,
         String salary,

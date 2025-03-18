@@ -6,6 +6,7 @@ import org.example.infrastructure.loginandregister.controler.dto.JwtResponseDto;
 import org.example.infrastructure.loginandregister.controler.dto.TokenRequestDto;
 import org.example.infrastructure.security.JwtAuthenticatorFacade;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

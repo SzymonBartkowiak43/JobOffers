@@ -27,7 +27,7 @@ public class LoginUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.username(),
                 user.password(),
-                Collections.emptyList() //miejsce na role
+                Collections.emptyList()
         );
     }
 }

@@ -29,7 +29,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_500_when_fault_connection_reset_by_peer() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.SC_OK)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -47,7 +47,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_500_when_fault_empty_response() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.SC_OK)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -64,7 +64,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_500_when_fault_malformed_response_chunk() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.SC_OK)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -81,7 +81,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_204_when_status_is_204_no_content() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.SC_NO_CONTENT)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -101,7 +101,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_500_when_response_delay_is_5000_ms_and_client_has_1000ms_read_timeout() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.SC_OK)
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
@@ -122,7 +122,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_404_when_http_service_returning_not_found_status() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withStatus(HttpStatus.SC_NOT_FOUND))
@@ -139,7 +139,7 @@ public class OfferFetcherRestTemplateErrorHandler {
     @Test
     void should_throw_exception_401_when_http_service_returning_unauthorized_status() {
         // given
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withHeader(CONTENT_TYPE_HEADER_KEY, APPLICATION_JSON_CONTENT_TYPE_VALUE)
                         .withStatus(HttpStatus.SC_UNAUTHORIZED))

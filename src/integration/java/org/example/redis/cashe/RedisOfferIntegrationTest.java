@@ -16,6 +16,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -50,6 +51,7 @@ public class RedisOfferIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_save_offers_to_cache_and_then_invalidate_by_time_to_live() throws Exception {
+        Objects.requireNonNull(cacheManager.getCache("jobOffers")).clear();
         // step 1: someUser was registered with somePassword
         // given & when
         ResultActions registerAction = mockMvc.perform(post("/register")
@@ -88,6 +90,7 @@ public class RedisOfferIntegrationTest extends BaseIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
         );
         // then
+        verify(offerFacade, times(1)).findAllOffers();
         assertThat(cacheManager.getCacheNames().contains("jobOffers")).isTrue();
 
         // step 4: cache should be invalidated

@@ -2,6 +2,10 @@ package org.example.features;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
+
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.example.BaseIntegrationTest;
 import org.example.SampleJobOffer;
 import org.example.domain.loginandregister.dto.RegisterMessageDto;
@@ -14,20 +18,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrationTest implements SampleJobOffer {
 
@@ -37,9 +42,9 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
     @Test
     public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() throws Exception {
-        //step 1: there are 0 offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        //step 1: there are 0 offers in external HTTP server ()
         //given && when && then
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json; charset=UTF-8")
@@ -48,10 +53,10 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //given
-        Throwable throwable = catchThrowable(() -> fetchAllOfferScheduler.FetchOfferAndSaveIfNotExists());
+        List<OfferResponseDto> newOffers =  fetchAllOfferScheduler.FetchOfferAndSaveIfNotExists();
 
         //when && then
-        assertThat(throwable).isNotNull();
+        assertThat(newOffers).isEmpty();
 
 
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
@@ -145,12 +150,11 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
         //step 8: there are 2 new offers in external HTTP server
         //given && when && then
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json; charset=UTF-8")
                         .withBody(bodyWith2OffersJson())));
-
 
         //step 9: scheduler ran 2nd time and made GET to external server and system added 2 new offers with ids: 1000 and 2000 to database
         // given
@@ -219,7 +223,7 @@ public class TypicalScenarioWantToSeeOffersIntegrationTest extends BaseIntegrati
 
         //step 13: there are 2 new offers in external HTTP server
         //given && when && then
-        wireMockServer.stubFor(WireMock.get("/offers")
+        wireMockServer.stubFor(WireMock.get("/offers/all")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json; charset=UTF-8")

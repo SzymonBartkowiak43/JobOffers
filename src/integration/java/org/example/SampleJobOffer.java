@@ -39,13 +39,17 @@ public interface SampleJobOffer {
                         "title": "Crazy developer",
                         "company": "X",
                         "salary": "7 000 - 9 000 PLN",
-                        "offerUrl": "offer 1"
+                        "offerUrl": "offer 1",
+                        "location": "Warsaw",
+                        "workMode": "Remote"
                     },
                     {
                         "title": "Java Developer",
                         "company": "Tesla",
                         "salary": "16 000 - 18 000 PLN",
-                        "offerUrl": "offer 2"
+                        "offerUrl": "offer 2",
+                        "location": "Krakow",
+                        "workMode": "Hybrid"
                     }
                 ]
                 """.trim();
@@ -54,6 +58,6 @@ public interface SampleJobOffer {
 
 
     default String bodyWith0OffersJson() {
-        return "";
+        return "[]";
     }
 }

@@ -23,7 +23,7 @@ http:
   offers:
     scheduler:
       request:
-        delay: PT3M
+        delay: PT30M
 
 logging:
   level:
@@ -43,5 +43,5 @@ springdoc:
 auth:
   jwt:
     expirationDays: 30
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:ababababbbsadfweawgasdfehrth}
     issuer: job-offers-backend
