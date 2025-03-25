@@ -1,8 +1,8 @@
-# JobOffers
+# JobFinder
 ## Web application helping find job offer!
 
 ### Description
-JobOffers is a Spring Boot web application that aggregates job offers for Junior Java Developers. It fetches offers from external servers on a schedule. Users register to receive a token, which they use to access or add offers. A simple React frontend enhances the presentation. Application was deployed on AWS EC2 server.
+JobFinder is a Spring Boot web application that aggregates job offers for Junior Java Developers. It fetches offers from external servers on a schedule. Users register to receive a token, which they use to access or add offers. A simple React frontend enhances the presentation. Application was deployed on AWS EC2 server.
 
 > **Author:**  Szymon Bartkowiak <br>
 > **Linkedin:** https://www.linkedin.com/in/szymon-bartkowiak-7516532b4/  <br>
@@ -11,7 +11,11 @@ JobOffers is a Spring Boot web application that aggregates job offers for Junior
 
 
 ### Video
-https://github.com/user-attachments/assets/9ae5914f-1017-4af4-94f1-c4925a61c757
+
+
+https://github.com/user-attachments/assets/33582e0e-583a-4832-a5fe-f5465fe1faeb
+
+
 
 
 
